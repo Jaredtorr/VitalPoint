@@ -1,0 +1,286 @@
+.title-cardiac {
+  text-align: center;
+  font-size: 38px;
+  margin-top: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.alert-cardiac {
+  background-color: #C8DAED;
+  width: 100%;
+  height: 180px;
+  padding: 20px 0;
+  margin-bottom: 30px;
+}
+
+.cardiac-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cardiac-text {
+  flex: 1;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+.subtitle-cardiac {
+  text-align: left;
+  font-size: 32px;
+  padding-top: 0;
+  margin: 0;
+  color: #333;
+  font-weight: 500;
+}
+
+
+.circle-container {
+  width: 140px;
+  height: 140px;
+}
+
+.circular-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+
+.circle-path {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: round;
+  animation: progress 1.5s ease-out forwards;
+}
+
+.percentage-text {
+  fill: #333;
+  font-size: 8px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-weight: normal;
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 0 100;
+  }
+}
+
+/* Nuevos estilos para la gráfica ECG */
+.ecg-section {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ecg-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.ecg-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.ecg-chart-wrapper {
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.ecg-chart-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(to right, #e0e0e0 1px, transparent 1px),
+    linear-gradient(to bottom, #e0e0e0 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.ecg-chart-wrapper:hover::before {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.ecg-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.status-normal {
+  color: #4CAF50 !important;
+}
+
+.status-alert {
+  color: #FF5722 !important;
+}
+
+.frecuencia-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 200px;
+}
+
+.title-frecuencia {
+  font-size: 24px;
+  margin: 0;
+}
+
+.number-frecuencia {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 10px 0 0;
+}
+
+/* Adaptabilidad a móvil */
+@media (max-width: 768px) {
+  .title-cardiac {
+    font-size: 28px;
+    margin-top: 15px;
+  }
+
+  .alert-cardiac {
+    height: auto;
+    padding: 15px 0;
+  }
+
+  .cardiac-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .subtitle-cardiac {
+    text-align: center;
+    font-size: 24px;
+  }
+
+  .circle-container {
+    margin-top: 20px;
+  }
+
+  /* Estilos móvil para ECG */
+  .ecg-section {
+    padding: 15px;
+  }
+
+  .ecg-container {
+    padding: 20px;
+  }
+
+  .ecg-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .ecg-chart-wrapper {
+    padding: 15px;
+  }
+
+  .ecg-stats {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .stat-item {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+}
+
+/* Estilos adicionales para mejor apariencia */
+@media (max-width: 480px) {
+  .title-cardiac {
+    font-size: 24px;
+  }
+
+  .subtitle-cardiac {
+    font-size: 20px;
+  }
+
+  .ecg-title {
+    font-size: 18px;
+  }
+
+  .circle-container {
+    width: 120px;
+    height: 120px;
+  }
+}

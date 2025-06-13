@@ -1,4 +1,5 @@
 import Cardiac from './pages/Cardiac/Cardiac'
+import { Routes, Route } from 'react-router-dom';
 import Stress from './pages/Stress/Stress'
 import './App.css'
 
