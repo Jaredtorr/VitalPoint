@@ -1,5 +1,7 @@
 import Cardiac from './pages/Cardiac/Cardiac'
+import { Routes, Route } from 'react-router-dom';
 import Stress from './pages/Stress/Stress'
+import TemperaturaCorporal from './pages/BodyTemperature/TemperaturaCorporal';
 import './App.css'
 
 function App() {
@@ -7,6 +9,7 @@ function App() {
    <Routes>
     <Route path='/cardiac' element = {<Cardiac/>} />
     <Route path='/stress'  element = {<Stress/>} /> 
+    <Route path='/BodyTemperature' element = {<TemperaturaCorporal/>}/>
    </Routes>
   )
 }

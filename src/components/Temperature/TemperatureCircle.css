@@ -1,0 +1,9 @@
+.circle-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 32px 0;
+  /* Asegúrate de NO tener overflow: hidden aquí */
+  width: 100%;
+  max-width: 100vw;
+}
