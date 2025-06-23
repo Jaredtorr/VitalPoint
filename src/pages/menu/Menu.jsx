@@ -9,6 +9,7 @@ import Orina from '../../assets/public/orina.jpg';
 import Azucar from '../../assets/public/azucar.jpg';
 import './Menu.css';
 
+
 const menuItems = [
   {
     label: 'Temperatura corporal',
