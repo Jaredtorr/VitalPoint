@@ -14,7 +14,7 @@ const data = [
 ];
 
 const TemperaturaCorporal = () => {
-  const temperatura = 36.5;
+  const temperatura = 37.5;
   const maxima = 38.4;
   const minima = 35.2;
 
