@@ -1,0 +1,43 @@
+.menu-container {
+  text-align: center;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 220px);
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f4f4f4;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  padding: 1rem;
+  transition: box-shadow 0.2s;
+  width: 220px;
+  height: 220px;
+}
+
+.menu-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.menu-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.menu-label {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
