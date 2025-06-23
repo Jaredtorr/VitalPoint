@@ -1,8 +1,8 @@
-import Cardiac from './pages/Cardiac/Cardiac'
+import Cardiac from './pages/Cardiac/Cardiac';
 import { Routes, Route } from 'react-router-dom';
-import Stress from './pages/Stress/Stress'
-import Menu from  './pages/menu/menu'
-import OxigenoSangre from './pages/oxigeno-sangre/OxigenoSangre'
+import Stress from './pages/Stress/Stress';
+import Menu from  './pages/menu/menu';
+import OxigenoSangre from './pages/oxigeno-sangre/OxigenoSangre';
 import './App.css'
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
     <Route path='/cardiac' element = {<Cardiac/>} />
     <Route path='/stress'  element = {<Stress/>} /> 
     <Route path='/Menu' element = {<Menu/>} />
+    <Route path='/OxigenoSangre' element = {<OxigenoSangre/>} />
    </Routes>
   )
 }
