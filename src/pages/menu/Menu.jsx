@@ -14,27 +14,27 @@ const menuItems = [
   {
     label: 'Temperatura corporal',
     image: Temp,
-    route: '/temperatura',
+    route: '/BodyTemperature',
   },
   {
     label: 'Ritmo cardíaco',
     image:  Cardiac,
-    route: '/ritmo-cardiaco',
+    route: '/cardiac',
   },
   {
     label: 'Saturación de oxígeno (SpO₂)',
     image:  Oxige,
-    route: '/oxigeno',
+    route: '/OxigenoSangre',
   },
   {
     label: 'Nivel de estrés',
     image:  Estres,
-    route: '/estres',
+    route: '/stress',
   },
   {
     label: 'Orina o Ph',
     image:  Orina,
-    route: '/orina',
+    route: '/phOrina',
   },
   {
     label: 'Azúcar en la orina',
