@@ -1,0 +1,33 @@
+.temp-main {
+  background: #dedede;
+  min-height: 100vh;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.temp-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.temp-label {
+  font-size: 2rem;
+  margin-bottom: 24px;
+  color: #222;
+}
+
+.ph-info {
+  margin-top: 32px;
+  font-size: 1.3rem;
+  color: #222;
+  text-align: center;
+}
+
+.ph-estado {
+  margin: 24px auto 0 auto;
+  padding: 12px 32px;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  width: fit-content;
+}
