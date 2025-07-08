@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { fetchTemperaturaCorporal } from "../../services/apiServices";
-import { connectMQTTCounter, TOPICS } from "../../services/mqttServices";
 import Header from "../../Components/Header/Header";
 import TemperatureCircle from "../../components/Temperature/TemperatureCircle";
 import TemperatureLineChart from "../../components/Temperature/TemperatureLineChart";
@@ -11,29 +10,19 @@ const TemperaturaCorporal = () => {
 
   useEffect(() => {
     fetchTemperaturaCorporal(setTemperaturas);
+    const interval = setInterval(() => {
+      fetchTemperaturaCorporal(setTemperaturas);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const disconnect = connectMQTTCounter(TOPICS.TEMPERATURA, (newData) => {
-      setTemperaturas((prev) => [...prev, newData]);
-    });
-
-    return () => {
-      disconnect();
-    };
-  }, []);
-
-  // Todos los datos para la gráfica de línea
+  // Mapea los datos para la gráfica
   const data = temperaturas.map((item) => ({
-    hora: item.tiempo?.slice(11, 16) || new Date().toLocaleTimeString().slice(0, 5),
-    temperatura: item.temp_objeto || item.temperatura || 0,
+    hora: item.tiempo?.slice(11, 16) || "--:--",
+    temperatura: Number(item.temp_objeto) ?? 0, // <-- usa temp_objeto como número
   }));
 
-  // Solo el último dato para el círculo
-  const temperaturaActual =
-    data.length > 0 ? data[data.length - 1].temperatura : 0;
-
-  // Máxima y mínima para mostrar en el texto
+  const temperaturaActual = data.length > 0 ? data[data.length - 1].temperatura : 0;
   const maxima = data.length > 0 ? Math.max(...data.map((d) => d.temperatura)) : 0;
   const minima = data.length > 0 ? Math.min(...data.map((d) => d.temperatura)) : 0;
 

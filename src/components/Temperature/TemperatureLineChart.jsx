@@ -1,21 +1,25 @@
 import React from "react";
 
 const getColor = (temp) => {
-  if (temp <= 37) return "#388e3c";      // Verde
-  if (temp <= 38) return "#fbc02d";      // Amarillo
-  return "#d32f2f";                      // Rojo
+  if (temp <= 37) return "#388e3c";
+  if (temp <= 38) return "#fbc02d";
+  return "#d32f2f";
 };
 
 const WIDTH = 800;
 const HEIGHT = 350;
 const PADDING = 60;
-const MIN_TEMP = 35;
-const MAX_TEMP = 40;
 
 const TemperatureLineChart = ({ data }) => {
-  const stepX = (WIDTH - 2 * PADDING) / (data.length - 1);
+  console.log("Datos recibidos en la gráfica:", data);
+  if (data.length === 0) return <div>Cargando datos...</div>;
+
+  const minTemp = Math.floor(Math.min(...data.map(d => d.temperatura))) - 1;
+  const maxTemp = Math.ceil(Math.max(...data.map(d => d.temperatura))) + 1;
+
+  const stepX = data.length > 1 ? (WIDTH - 2 * PADDING) / (data.length - 1) : 0;
   const scaleY = (temp) =>
-    HEIGHT - PADDING - ((temp - MIN_TEMP) / (MAX_TEMP - MIN_TEMP)) * (HEIGHT - 2 * PADDING);
+    HEIGHT - PADDING - ((temp - minTemp) / (maxTemp - minTemp)) * (HEIGHT - 2 * PADDING);
 
   const points = data.map((d, i) => ({
     x: PADDING + i * stepX,
@@ -25,9 +29,9 @@ const TemperatureLineChart = ({ data }) => {
     value: d.temperatura,
   }));
 
-  const linePath = points
-    .map((p, i) => (i === 0 ? `M ${p.x},${p.y}` : `L ${p.x},${p.y}`))
-    .join(" ");
+  const linePath = points.length > 1
+    ? points.map((p, i) => (i === 0 ? `M ${p.x},${p.y}` : `L ${p.x},${p.y}`)).join(" ")
+    : "";
 
   return (
     <div style={{ width: WIDTH, margin: "40px auto" }}>
@@ -37,8 +41,8 @@ const TemperatureLineChart = ({ data }) => {
         <line x1={PADDING} y1={PADDING} x2={PADDING} y2={HEIGHT - PADDING} stroke="#aaa" />
 
         {/* Etiquetas de eje Y */}
-        {[...Array(MAX_TEMP - MIN_TEMP + 1)].map((_, i) => {
-          const temp = MIN_TEMP + i;
+        {[...Array(maxTemp - minTemp + 1)].map((_, i) => {
+          const temp = minTemp + i;
           const y = scaleY(temp);
           return (
             <g key={temp}>
@@ -51,26 +55,26 @@ const TemperatureLineChart = ({ data }) => {
         })}
 
         {/* Etiquetas de eje X */}
-        {points.map((p, i) => (
-          <text
-            key={i}
-            x={p.x}
-            y={HEIGHT - PADDING + 28}
-            fontSize="16"
-            textAnchor="middle"
-            fill="#444"
-          >
-            {p.label}
-          </text>
-        ))}
+        {points.map((p, i) =>
+          i % 3 === 0 ? (
+            <text
+              key={i}
+              x={p.x}
+              y={HEIGHT - PADDING + 28}
+              fontSize="16"
+              textAnchor="middle"
+              fill="#444"
+            >
+              {p.label}
+            </text>
+          ) : null
+        )}
 
         {/* Línea de la gráfica */}
-        <path d={linePath} fill="none" stroke="#8884d8" strokeWidth="3" />
-
-        {/* Puntos */}
-        {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={12} fill={p.color} stroke="#fff" strokeWidth="3" />
-        ))}
+        {points.length > 1 && (
+          <path d={linePath} fill="none" stroke="#8884d8" strokeWidth="3" />
+        )}
+        {/* Ya no se muestran puntos ni valores */}
       </svg>
     </div>
   );
