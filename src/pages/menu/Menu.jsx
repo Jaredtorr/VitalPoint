@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from "../../Components/Header/Header";
+import Header from "../../components/header/Header";
 import Temp from '../../assets/public/temperatura.jpg';
 import Cardiac from '../../assets/public/ritmo-cardiaco.jpg';
 import Oxige from '../../assets/public/oxigeno.jpg';

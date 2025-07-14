@@ -8,7 +8,6 @@ export async function fetchTemperaturaCorporal(setData) {
         }
 
         const data = await response.json();
-        // Transformar los datos al formato esperado por la tabla
         const formattedData = data.map(item => ({
             id: item.id,
             esp32_id: item.esp32ID,
@@ -19,7 +18,7 @@ export async function fetchTemperaturaCorporal(setData) {
         setData(formattedData);
     } catch (error) {
         console.error('Error al conectar con la API de temperatura corporal:', error);
-        setData([]); // En caso de error, establecer array vacío
+        setData([]);
     }
 }
 
@@ -31,7 +30,6 @@ export async function fetchOxigenacion(setData) {
         }
 
         const data = await response.json();
-        // Transformar los datos al formato esperado por la tabla
         const formattedData = data.map(item => ({
             id: item.id,
             esp32_id: item.esp32ID,
@@ -42,6 +40,27 @@ export async function fetchOxigenacion(setData) {
         setData(formattedData);
     } catch (error) {
         console.error('Error al conectar con la API de oxigenación:', error);
-        setData([]); // En caso de error, establecer array vacío
+        setData([]);
+    }
+}
+
+export async function fetchpH(setData) {
+    try {
+        const response = await fetch(`${BASE_API_URL}/urinepH`); 
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de pH');
+        }
+
+        const data = await response.json();
+        const formattedData = data.map(item => ({
+            id: item.id,
+            esp32_id: item.esp32ID,
+            tiempo: item.tiempo,
+            ph: item.ph,
+        }));
+        setData(formattedData);
+    } catch (error) {
+        console.error('Error al conectar con la API de pH:', error);
+        setData([]);
     }
 }
