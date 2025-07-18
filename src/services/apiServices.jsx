@@ -36,6 +36,7 @@ export async function fetchOxigenacion(setData) {
             tiempo: item.tiempo,
             ir: item.ir,
             red: item.red,
+            spo2: item.spo2,
         }));
         setData(formattedData);
     } catch (error) {
