@@ -5,9 +5,10 @@ const PADDING = 60;
 const BAR_HEIGHT = 30;
 
 const getColor = (ph) => {
-  if (ph < 6) return "#fbc02d";
-  if (ph <= 7.5) return "#388e3c";
-  return "#d32f2f";
+  if (ph < 7) return "#f44336";      // Ácido - rojo
+  if (ph === 7) return "#4caf50";    // Neutro - verde
+  if (ph > 7) return "#3f51b5";      // Alcalino - azul
+  return "#bdbdbd";
 };
 
 const PhLineChart = ({ data }) => {

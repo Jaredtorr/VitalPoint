@@ -4,6 +4,13 @@ import Header from "../../Components/Header/Header";
 import PhLineChart from "../../components/phorina/PhLineChart";
 import "./PhOrina.css";
 
+const getPhEstado = (ph) => {
+  if (ph < 7) return { texto: "Ácido", color: "#f44336" }; // Rojo
+  if (ph === 7) return { texto: "Neutro", color: "#4caf50" }; // Verde
+  if (ph > 7) return { texto: "Alcalino", color: "#3f51b5" }; // Azul
+  return { texto: "Sin datos", color: "#bdbdbd" };
+};
+
 const PhOrina = () => {
   const [phData, setPhData] = useState([]);
 
@@ -43,19 +50,8 @@ const PhOrina = () => {
   const promedio = data.length > 0
     ? (data.reduce((acc, d) => acc + d.ph, 0) / data.length).toFixed(2)
     : 0;
-  const rangoIdeal = "6.0 - 7.5";
-  const estado =
-    phActual < 6
-      ? "Levemente ácido"
-      : phActual > 7.5
-      ? "Alcalino"
-      : "Normal";
-  const estadoColor =
-    phActual < 6
-      ? "#a5d6a7"
-      : phActual > 7.5
-      ? "#ef9a9a"
-      : "#81c784";
+  const rangoIdeal = "Ácido (0-6.9), Neutro (7), Alcalino (8-14)";
+  const { texto: estado, color: estadoColor } = getPhEstado(phActual);
 
   return (
     <div className="temp-main">
@@ -71,9 +67,9 @@ const PhOrina = () => {
             <b>Promedio del día:</b> {promedio}
           </p>
           <p>
-            <b>Rango ideal:</b> {rangoIdeal}
+            <b>Rango según escala:</b> {rangoIdeal}
           </p>
-          <div className="ph-estado" style={{ background: estadoColor }}>
+          <div className="ph-estado" style={{ background: estadoColor, color: "#fff", fontWeight: "bold", borderRadius: 8, padding: "10px 0", marginTop: 10 }}>
             {estado}
           </div>
         </div>
