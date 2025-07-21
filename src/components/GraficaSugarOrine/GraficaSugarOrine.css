@@ -1,0 +1,15 @@
+.grafica-container {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 950px;
+  background-color: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.titulo-grafica {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #333;
+}

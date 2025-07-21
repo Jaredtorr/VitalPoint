@@ -1,0 +1,68 @@
+.contenido-azucar-orina {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.titulo-azucar {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.imagen-azucar {
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  display: block;
+  margin: 0 auto 30px auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subtitulo-urobilinogeno {
+  background-color: #f7e4e4;
+  color: #4b0000;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: 1px solid #c9a3a3;
+  border-radius: 8px;
+  margin: 0 auto 30px auto;
+  width: 350px;
+  text-align: center;
+}
+
+.grafica-container {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.numero-destacado {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  font-size: 48px;
+  font-weight: 700;
+  color: #004466;
+  user-select: none;
+  text-align: center;
+  background: #e0f0ff;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  box-shadow: 0 0 12px #0077ccaa;
+}
+
+.texto-porcentaje {
+  font-size: 14px;
+  font-weight: 600;
+  color: #004466;
+  margin-top: 4px;
+  line-height: 1;
+}
