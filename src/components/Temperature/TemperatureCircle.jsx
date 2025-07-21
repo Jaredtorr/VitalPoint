@@ -2,8 +2,13 @@ import React from "react";
 import "./TemperatureCircle.css";
 
 const TemperatureCircle = ({ temperature }) => {
-  const isHigh = temperature > 37.5;
-  const borderColor = isHigh ? "#d32f2f" : "#388e3c"; // rojo o verde
+  let borderColor = "#388e3c"; // verde por defecto
+
+  if (temperature > 37.5) {
+    borderColor = "#d32f2f"; // rojo
+  } else if (temperature > 37) {
+    borderColor = "#fbc02d"; // amarillo
+  }
 
   return (
     <div className="circle-container">
@@ -12,7 +17,7 @@ const TemperatureCircle = ({ temperature }) => {
         <circle cx="110" cy="110" r="85" stroke={borderColor} strokeWidth="3" fill="none" />
         <circle cx="110" cy="110" r="70" stroke={borderColor} strokeWidth="2" fill="none" />
         <text x="110" y="120" fontSize="36" textAnchor="middle" fill="#222" fontFamily="serif">
-          {temperature}
+          {temperature.toFixed(1)}°C
         </text>
       </svg>
     </div>
