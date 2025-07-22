@@ -8,7 +8,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  ReferenceLine
 } from "recharts";
 import "./Oxigeno-sangre.css";
 
@@ -23,33 +24,42 @@ const OxigenoSangre = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Preparar datos para la gráfica
-  const dataChart = oxigenoData.map((item, index) => ({
-    tiempo: item.tiempo ? item.tiempo.slice(11, 16) : `#${index + 1}`,
-    spo2: Number(item.spo2) || 0,
-  }));
+  const dataChart = oxigenoData
+    .filter(item => typeof item.spo2 === "number" && item.spo2 > 0)
+    .slice(-200) // Solo los últimos 200 datos
+    .map((item, index) => ({
+      tiempo: item.tiempo ? item.tiempo.slice(11, 16) : `#${index + 1}`,
+      spo2: item.spo2,
+    }));
+
+  const spo2Validos = dataChart.map(item => item.spo2);
+  const spo2Actual = spo2Validos.length ? spo2Validos[spo2Validos.length - 1] : 0;
 
   return (
     <div className="oxigeno-sangre-container">
       <Header />
-      <h1 className="title-stress">Saturación de oxígeno (SpO₂)</h1>
-      <div style={{ width: "95%", height: 400, margin: "0 auto" }}>
+      <h2 style={{ textAlign: "center", margin: "30px 0 10px 0", fontWeight: "bold" }}>
+        Saturación de oxígeno en sangre
+      </h2>
+      <div style={{textAlign: "center", fontSize: "2.5rem", fontWeight: "bold", color: "#1976d2", marginBottom: "10px"}}>
+        SpO₂ actual: {spo2Actual}%
+      </div>
+      <div style={{ width: "95%", height: 400, margin: "0 auto", background: "#fff", borderRadius: "16px", padding: "20px", boxShadow: "0 2px 8px #ccc" }}>
         <ResponsiveContainer>
           <LineChart
             data={dataChart}
             margin={{ top: 30, right: 30, left: 10, bottom: 30 }}
           >
-            <CartesianGrid stroke="#bdefff" strokeDasharray="3 3" />
+            <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
             <XAxis 
               dataKey="tiempo"
-              label={{ value: "Hora", position: "insideBottom", offset: -10 }}
-              tick={{ fontSize: 12 }}
-              interval={Math.ceil(dataChart.length / 10) - 1}
+              label={{ value: "Hora", position: "insideBottomRight", offset: 0, fontSize: 16, fontWeight: "bold" }}
+              tick={{ fontSize: 13 }}
             />
             <YAxis 
-              label={{ value: "SpO₂ (%)", angle: -90, position: "insideLeft", fontSize: 14 }}
-              tick={{ fontSize: 12 }}
-              domain={[0, 100]}
+              label={{ value: "SpO₂ (%)", angle: -90, position: "insideLeft", fontSize: 16, fontWeight: "bold" }}
+              tick={{ fontSize: 13 }}
+              domain={[50, 100]}
             />
             <Tooltip />
             <Line
@@ -57,24 +67,28 @@ const OxigenoSangre = () => {
               dataKey="spo2"
               stroke="#1976d2"
               strokeWidth={3}
-              dot={{ r: 6, fill: "#ff9800", stroke: "#1976d2", strokeWidth: 2 }}
-              activeDot={{ r: 8, fill: "#fbc02d", stroke: "#1976d2", strokeWidth: 2 }}
+              dot={false}
+              activeDot={{ r: 10, fill: "#1976d2", stroke: "#fff", strokeWidth: 2 }}
             />
+            {/* Línea de referencia en 95% */}
+            <ReferenceLine y={95} stroke="#ff5252" strokeDasharray="5 5" label="Límite normal" />
           </LineChart>
         </ResponsiveContainer>
       </div>
       <div className="oxigeno-datos" style={{display: "flex", justifyContent: "center", gap: "80px", marginTop: "30px"}}>
         <div>
           <span className="oxigeno-label">Máximo</span>
-          <div className="oxigeno-valor">{Math.max(...dataChart.map(item => item.spo2))}</div>
+          <div className="oxigeno-valor">{spo2Validos.length ? Math.max(...spo2Validos) : 0}</div>
         </div>
         <div>
           <span className="oxigeno-label">Mínimo</span>
-          <div className="oxigeno-valor">{Math.min(...dataChart.map(item => item.spo2))}</div>
+          <div className="oxigeno-valor">{spo2Validos.length ? Math.min(...spo2Validos) : 0}</div>
         </div>
         <div>
           <span className="oxigeno-label">Promedio</span>
-          <div className="oxigeno-valor">{(dataChart.reduce((sum, item) => sum + item.spo2, 0) / (dataChart.length || 1)).toFixed(1)}</div>
+          <div className="oxigeno-valor">
+            {spo2Validos.length ? (spo2Validos.reduce((sum, val) => sum + val, 0) / spo2Validos.length).toFixed(1) : 0}
+          </div>
         </div>
       </div>
     </div>
