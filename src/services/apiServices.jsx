@@ -101,3 +101,21 @@ export async function fetchStress(setData) {
     setData([]);
   }
 }
+
+// Sugar
+export async function fetchSugar(setData) {
+  try {
+    const response = await fetch(`${BASE_API_URL}/sugar`);
+    const data = await handleResponse(response, 'sugar');
+    const formattedData = data.map(item => ({
+      id: item.id,
+      esp32_id: item.esp32ID,
+      tiempo: item.tiempo,
+      glucosa: item.glucosa,
+    }));
+    setData(formattedData);
+  } catch (error) {
+    console.error('Error al conectar con la API de azúcar en orina:', error);
+    setData([]);
+  }
+}

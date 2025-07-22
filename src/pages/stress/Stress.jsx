@@ -7,14 +7,14 @@ function Stress() {
   const [nivel, setNivel] = useState("Desconocido");
   const [color, setColor] = useState("#4caf50");
   const [mensaje, setMensaje] = useState("Cargando...");
-  const [angulo, setAngulo] = useState(Math.PI); // posición inicial (0%)
+  const [angulo, setAngulo] = useState(Math.PI);
 
   useEffect(() => {
     const fetchData = () => {
       fetchStress((data) => {
         if (data.length > 0) {
           const ultimo = data[data.length - 1];
-          const nivelApi = ultimo.estres?.toLowerCase(); // 'alto', 'medio', 'bajo'
+          const nivelApi = ultimo.estres?.toLowerCase();
 
           switch (nivelApi) {
             case "alto":
