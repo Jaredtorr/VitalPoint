@@ -12,8 +12,7 @@ export async function fetchTemperaturaCorporal(setData) {
             id: item.id,
             esp32_id: item.esp32ID,
             tiempo: item.tiempo,
-            temp_ambiente: item.temp_ambiente,
-            temp_objeto: item.temp_objeto,
+            stress: item.stress
         }));
         setData(formattedData);
     } catch (error) {

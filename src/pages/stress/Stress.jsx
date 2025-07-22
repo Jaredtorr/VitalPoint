@@ -1,27 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
 import "./Stress.css";
+import { fetchTemperaturaCorporal } from "../../services/apiServices";
 
 function Stress() {
-  const porcentaje = 87;
+  const [porcentaje, setPorcentaje] = useState(0);
 
-  // Clasificación y color según porcentaje
+  useEffect(() => {
+    fetchTemperaturaCorporal((data) => {
+      if (data.length > 0) {
+        const ultimo = data[data.length - 1]; // Último registro
+        setPorcentaje(ultimo.stress);
+      }
+    });
+  }, []);
+
   let nivel = "Bajo";
-  let color = "#4caf50"; // verde
+  let color = "#4caf50";
   let mensaje = "¡Estás bien! Sigue así.";
 
   if (porcentaje >= 70) {
     nivel = "Alto";
-    color = "#D32F2F"; // rojo
+    color = "#D32F2F";
     mensaje = "Estás a punto de explotar. Respira y controla tu estrés.";
   } else if (porcentaje >= 40) {
     nivel = "Moderado";
-    color = "#FFA726"; // naranja
+    color = "#FFA726";
     mensaje = "Nivel de estrés moderado. Mantente atento.";
   }
 
-  // Conversión de porcentaje a grados para la aguja
-  // 0% = -90 grados (izquierda), 100% = 90 grados (derecha)
   const angle = (porcentaje * 180) / 100 - 90;
 
   return (
@@ -36,7 +43,6 @@ function Stress() {
           height="auto"
           className="gauge"
         >
-          {/* Fondo semicircular con gradiente de colores */}
           <defs>
             <linearGradient id="gradient" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stopColor="#4caf50" />
@@ -45,7 +51,6 @@ function Stress() {
             </linearGradient>
           </defs>
 
-          {/* Semicírculo base */}
           <path
             d="M20 100 A80 80 0 0 1 180 100"
             fill="none"
@@ -54,7 +59,6 @@ function Stress() {
             strokeLinecap="round"
           />
 
-          {/* Aguja */}
           <line
             x1="100"
             y1="100"
@@ -66,10 +70,8 @@ function Stress() {
             style={{ transition: "all 1s ease-out" }}
           />
 
-          {/* Centro de aguja (círculo) */}
           <circle cx="100" cy="100" r="8" fill={color} />
 
-          {/* Marcas (ticks) cada 20% */}
           {[0, 20, 40, 60, 80, 100].map((val) => {
             const tickAngle = (val * 180) / 100 - 90;
             const x1 = 100 + 80 * Math.cos((tickAngle * Math.PI) / 180);
@@ -89,7 +91,6 @@ function Stress() {
             );
           })}
 
-          {/* Texto % en semicirculo */}
           <text
             x="100"
             y="60"
@@ -102,7 +103,6 @@ function Stress() {
           </text>
         </svg>
 
-        {/* Texto fuera de la gráfica */}
         <div className="gauge-text">
           <p className="gauge-level" style={{ color }}>
             {nivel}
