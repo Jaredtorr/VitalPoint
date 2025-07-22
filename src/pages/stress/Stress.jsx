@@ -1,28 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
 import "./Stress.css";
+import { fetchStress } from "../../services/apiServices";
 
 function Stress() {
-  const porcentaje = 87;
+  const [nivel, setNivel] = useState("Desconocido");
+  const [color, setColor] = useState("#4caf50");
+  const [mensaje, setMensaje] = useState("Cargando...");
+  const [angulo, setAngulo] = useState(Math.PI); // posición inicial (0%)
 
-  // Clasificación y color según porcentaje
-  let nivel = "Bajo";
-  let color = "#4caf50"; // verde
-  let mensaje = "¡Estás bien! Sigue así.";
+  useEffect(() => {
+    const fetchData = () => {
+      fetchStress((data) => {
+        if (data.length > 0) {
+          const ultimo = data[data.length - 1];
+          const nivelApi = ultimo.estres?.toLowerCase(); // 'alto', 'medio', 'bajo'
 
-  if (porcentaje >= 70) {
-    nivel = "Alto";
-    color = "#D32F2F"; // rojo
-    mensaje = "Estás a punto de explotar. Respira y controla tu estrés.";
-  } else if (porcentaje >= 40) {
-    nivel = "Moderado";
-    color = "#FFA726"; // naranja
-    mensaje = "Nivel de estrés moderado. Mantente atento.";
-  }
+          switch (nivelApi) {
+            case "alto":
+              setNivel("Alto");
+              setColor("#D32F2F");
+              setMensaje("Estás a punto de explotar. Respira y controla tu estrés.");
+              setAngulo((180 - 85 * 180 / 100) * Math.PI / 180);
+              break;
+            case "medio":
+              setNivel("Medio");
+              setColor("#FFA726");
+              setMensaje("Nivel de estrés medio. Mantente atento.");
+              setAngulo((180 - 50 * 180 / 100) * Math.PI / 180);
+              break;
+            case "bajo":
+              setNivel("Bajo");
+              setColor("#4caf50");
+              setMensaje("¡Estás bien! Sigue así.");
+              setAngulo((180 - 20 * 180 / 100) * Math.PI / 180);
+              break;
+            default:
+              console.warn("Nivel de estrés no reconocido:", nivelApi);
+              setNivel("Desconocido");
+              setColor("#9e9e9e");
+              setMensaje("No se pudo interpretar el nivel de estrés.");
+              setAngulo(Math.PI);
+              break;
+          }
+        } else {
+          console.warn("No se encontraron datos de estrés.");
+        }
+      });
+    };
 
-  // Conversión de porcentaje a grados para la aguja
-  // 0% = -90 grados (izquierda), 100% = 90 grados (derecha)
-  const angle = (porcentaje * 180) / 100 - 90;
+    fetchData(); // Primera llamada inmediata
+    const intervalId = setInterval(fetchData, 1000); // Actualiza cada segundo
+
+    return () => clearInterval(intervalId); // Limpia el intervalo al desmontar
+  }, []);
 
   return (
     <>
@@ -30,13 +61,7 @@ function Stress() {
       <h1 className="title-stress">Nivel de Estrés</h1>
 
       <div className="gauge-container">
-        <svg
-          viewBox="0 0 200 120"
-          width="100%"
-          height="auto"
-          className="gauge"
-        >
-          {/* Fondo semicircular con gradiente de colores */}
+        <svg viewBox="0 0 200 120" className="gauge">
           <defs>
             <linearGradient id="gradient" x1="0" y1="1" x2="1" y2="0">
               <stop offset="0%" stopColor="#4caf50" />
@@ -45,7 +70,6 @@ function Stress() {
             </linearGradient>
           </defs>
 
-          {/* Semicírculo base */}
           <path
             d="M20 100 A80 80 0 0 1 180 100"
             fill="none"
@@ -54,28 +78,28 @@ function Stress() {
             strokeLinecap="round"
           />
 
-          {/* Aguja */}
-          <line
-            x1="100"
-            y1="100"
-            x2={100 + 70 * Math.cos((angle * Math.PI) / 180)}
-            y2={100 + 70 * Math.sin((angle * Math.PI) / 180)}
-            stroke={color}
-            strokeWidth="4"
-            strokeLinecap="round"
-            style={{ transition: "all 1s ease-out" }}
-          />
+          {!isNaN(angulo) && (
+            <line
+              x1="100"
+              y1="100"
+              x2={100 + 70 * Math.cos(angulo)}
+              y2={100 - 70 * Math.sin(angulo)}
+              stroke={color}
+              strokeWidth="4"
+              strokeLinecap="round"
+              style={{ transition: "all 0.5s ease-out" }}
+            />
+          )}
 
-          {/* Centro de aguja (círculo) */}
           <circle cx="100" cy="100" r="8" fill={color} />
 
-          {/* Marcas (ticks) cada 20% */}
           {[0, 20, 40, 60, 80, 100].map((val) => {
-            const tickAngle = (val * 180) / 100 - 90;
-            const x1 = 100 + 80 * Math.cos((tickAngle * Math.PI) / 180);
-            const y1 = 100 + 80 * Math.sin((tickAngle * Math.PI) / 180);
-            const x2 = 100 + 70 * Math.cos((tickAngle * Math.PI) / 180);
-            const y2 = 100 + 70 * Math.sin((tickAngle * Math.PI) / 180);
+            const deg = 180 - (val * 180) / 100;
+            const rad = (deg * Math.PI) / 180;
+            const x1 = 100 + 80 * Math.cos(rad);
+            const y1 = 100 - 80 * Math.sin(rad);
+            const x2 = 100 + 70 * Math.cos(rad);
+            const y2 = 100 - 70 * Math.sin(rad);
             return (
               <line
                 key={val}
@@ -89,7 +113,6 @@ function Stress() {
             );
           })}
 
-          {/* Texto % en semicirculo */}
           <text
             x="100"
             y="60"
@@ -98,15 +121,12 @@ function Stress() {
             fill={color}
             fontWeight="bold"
           >
-            {porcentaje}%
+            {nivel}
           </text>
         </svg>
 
-        {/* Texto fuera de la gráfica */}
         <div className="gauge-text">
-          <p className="gauge-level" style={{ color }}>
-            {nivel}
-          </p>
+          <p className="gauge-level" style={{ color }}>{nivel}</p>
           <p className="gauge-message">{mensaje}</p>
         </div>
       </div>

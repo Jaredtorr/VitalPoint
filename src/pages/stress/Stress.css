@@ -33,8 +33,6 @@
   color: #555;
 }
 
-/* Responsive */
-
 @media (max-width: 768px) {
   .title-stress {
     font-size: 28px;

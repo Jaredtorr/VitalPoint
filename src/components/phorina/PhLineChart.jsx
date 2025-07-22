@@ -1,70 +1,102 @@
 import React from "react";
 
 const WIDTH = 700;
-const HEIGHT = 350;
 const PADDING = 60;
-const MIN_PH = 4.5;
-const MAX_PH = 8.5;
+const BAR_HEIGHT = 30;
 
 const getColor = (ph) => {
-  if (ph < 6) return "#fbc02d";      // Amarillo (ácido)
-  if (ph <= 7.5) return "#388e3c";   // Verde (normal)
-  return "#d32f2f";                  // Rojo (alcalino)
+  if (ph < 7) return "#f44336";      // Ácido - rojo
+  if (ph === 7) return "#4caf50";    // Neutro - verde
+  if (ph > 7) return "#3f51b5";      // Alcalino - azul
+  return "#bdbdbd";
 };
 
 const PhLineChart = ({ data }) => {
-  const stepX = (WIDTH - 2 * PADDING) / (data.length - 1);
-  const scaleY = (ph) =>
-    HEIGHT - PADDING - ((ph - MIN_PH) / (MAX_PH - MIN_PH)) * (HEIGHT - 2 * PADDING);
-
-  const points = data.map((d, i) => ({
-    x: PADDING + i * stepX,
-    y: scaleY(d.ph),
-    color: getColor(d.ph),
-    label: d.hora,
-    value: d.ph,
-  }));
-
-  const linePath = points
-    .map((p, i) => (i === 0 ? `M ${p.x},${p.y}` : `L ${p.x},${p.y}`))
-    .join(" ");
+  const maxPh = Math.max(...data.map(d => d.ph), 8.5);
 
   return (
-    <div style={{ width: WIDTH, margin: "0 auto" }}>
-      <svg width={WIDTH} height={HEIGHT} style={{ background: "#fff", borderRadius: 8 }}>
-        {/* Ejes */}
-        <line x1={PADDING} y1={HEIGHT - PADDING} x2={WIDTH - PADDING} y2={HEIGHT - PADDING} stroke="#aaa" />
-        <line x1={PADDING} y1={PADDING} x2={PADDING} y2={HEIGHT - PADDING} stroke="#aaa" />
-
-        {/* Etiquetas de eje Y */}
-        {[...Array(Math.round(MAX_PH - MIN_PH) + 1)].map((_, i) => {
-          const ph = MIN_PH + i;
-          const y = scaleY(ph);
-          return (
-            <g key={ph}>
-              <text x={PADDING - 10} y={y + 5} fontSize="12" textAnchor="end" fill="#444">
-                {ph.toFixed(1)}
-              </text>
-              <line x1={PADDING - 5} y1={y} x2={PADDING} y2={y} stroke="#ccc" />
-            </g>
-          );
-        })}
-
-        {/* Línea de la gráfica */}
-        <path d={linePath} fill="none" stroke="#fbc02d" strokeWidth="2" />
-
-        {/* Último punto destacado */}
-        {points.length > 0 && (
-          <circle
-            cx={points[points.length - 1].x}
-            cy={points[points.length - 1].y}
-            r={6}
-            fill={points[points.length - 1].color}
-            stroke="#fff"
-            strokeWidth="2"
+    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: 32 }}>
+      {/* Gráfica de barras */}
+      <div style={{ width: WIDTH }}>
+        <svg width={WIDTH} height={PADDING + data.length * (BAR_HEIGHT + 10)}>
+          {/* Eje X */}
+          <line
+            x1={PADDING}
+            y1={PADDING - 10}
+            x2={PADDING}
+            y2={PADDING + data.length * (BAR_HEIGHT + 10) - 10}
+            stroke="#aaa"
           />
-        )}
-      </svg>
+          {/* Etiquetas y barras */}
+          {data.map((d, i) => {
+            const barWidth = ((d.ph / maxPh) * (WIDTH - 200));
+            return (
+              <g key={i}>
+                {/* Etiqueta de hora */}
+                <text
+                  x={PADDING - 10}
+                  y={PADDING + i * (BAR_HEIGHT + 10) + BAR_HEIGHT / 2 + 5}
+                  fontSize="16"
+                  textAnchor="end"
+                  fill="#444"
+                >
+                  {d.hora}
+                </text>
+                {/* Barra */}
+                <rect
+                  x={PADDING}
+                  y={PADDING + i * (BAR_HEIGHT + 10)}
+                  width={barWidth}
+                  height={BAR_HEIGHT}
+                  fill={getColor(d.ph)}
+                  rx={6}
+                />
+                {/* Valor de pH */}
+                <text
+                  x={PADDING + barWidth + 10}
+                  y={PADDING + i * (BAR_HEIGHT + 10) + BAR_HEIGHT / 2 + 5}
+                  fontSize="16"
+                  textAnchor="start"
+                  fill="#222"
+                >
+                  {d.ph}
+                </text>
+              </g>
+            );
+          })}
+          {/* Eje Y (valores de pH) opcional */}
+          {[...Array(6)].map((_, i) => {
+            const phValue = 5 + i * 0.5;
+            const x = PADDING + ((phValue / maxPh) * (WIDTH - 200));
+            return (
+              <g key={phValue}>
+                <line
+                  x1={x}
+                  y1={PADDING - 10}
+                  x2={x}
+                  y2={PADDING + data.length * (BAR_HEIGHT + 10) - 10}
+                  stroke="#eee"
+                />
+                <text
+                  x={x}
+                  y={PADDING - 20}
+                  fontSize="12"
+                  textAnchor="middle"
+                  fill="#888"
+                >
+                  {phValue.toFixed(1)}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
+      {/* Imagen de escala de pH */}
+      <img
+        src="phescala.jpeg"
+        alt="Escala de pH"
+        style={{ height: PADDING + data.length * (BAR_HEIGHT + 10) - 10, maxWidth: 500, objectFit: "contain", borderRadius: 12 }}
+      />
     </div>
   );
 };
