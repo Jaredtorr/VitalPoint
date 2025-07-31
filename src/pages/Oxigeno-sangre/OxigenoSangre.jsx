@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/header/Header";
+import Header from "../../Components/Header/Header";
 import { fetchOxigenacion } from "../../services/apiServices";
 import {
   LineChart,

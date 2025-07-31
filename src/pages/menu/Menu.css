@@ -3,11 +3,17 @@
 }
 
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 220px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 2rem;
-  justify-content: center;
   margin-top: 2rem;
+}
+
+.menu-row {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
 }
 
 .menu-card {

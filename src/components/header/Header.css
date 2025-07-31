@@ -54,21 +54,29 @@
 }
 
 .header-menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: 45px;
-  background: #fff;
-  color: #000a23;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  min-width: 180px;
-  z-index: 9999; /* <-- Súbelo bastante */
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
 }
 
 .header-menu-dropdown ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.header-menu-dropdown button {
+    width: 100%;
+    padding: 10px 15px;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
 }
 
 .header-menu-dropdown li button {
@@ -85,4 +93,16 @@
 
 .header-menu-dropdown li button:hover {
   background: #e0e7ef;
+}
+
+.admin-option {
+    color: #2196F3 !important;
+    font-weight: bold !important;
+    background-color: #f0f8ff !important;
+}
+
+.admin-option::before {
+    content: '👑';
+    margin-right: 5px;
+    font-size: 14px;
 }

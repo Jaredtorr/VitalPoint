@@ -1,25 +1,50 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import './Header.css'
+import { useAuth } from "../../context/AuthContext";
+import './Header.css';
 
-const menuOptions = [
+// Opciones base del menú
+const baseMenuOptions = [
   { label: "Menú", path: "/Menu" },
   { label: "Temperatura corporal", path: "/BodyTemperature" },
-  { label: "Ritmo cardíaco", path: "/cardiac" },
   { label: "Saturación de oxígeno (SpO₂)", path: "/OxigenoSangre" },
   { label: "Nivel de estrés", path: "/stress" },
   { label: "Orina o pH", path: "/phOrina" },
-  { label: "Azúcar en la orina", path: "/azucar" },
-  { label: "Cerrar sesión", path: "/" } // Ruta de cierre de sesión
+  { label: "Azúcar en la orina", path: "/SugarOrine" },
+];
+
+// Opciones para administradores
+const adminOptions = [
+  { label: "Estadísticas", path: "/estadisticas" },
+  { label: "Crear Usuario", path: "/crear-usuario" },
 ];
 
 function Header() {
     const [open, setOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     // Oculta el menú en login y menú principal
     const hideMenu = ["/", "/Menu"].includes(location.pathname);
+
+    // Añade un console.log para verificar el rol del usuario
+    console.log('Usuario actual:', user);
+
+    const isAdmin = user?.role === 'admin';
+    
+    // Modifica cómo se combinan las opciones del menú
+    const menuOptions = React.useMemo(() => {
+        const options = [...baseMenuOptions];
+        
+        if (isAdmin) {
+            options.push(...adminOptions);
+        }
+        
+        options.push({ label: "Cerrar sesión", path: "/" });
+        
+        return options;
+    }, [isAdmin]);
 
     const handleNavigate = (path) => {
       setOpen(false);
@@ -47,7 +72,10 @@ function Header() {
                             <ul>
                                 {menuOptions.map(opt => (
                                     <li key={opt.path}>
-                                        <button onClick={() => handleNavigate(opt.path)}>
+                                        <button 
+                                            onClick={() => handleNavigate(opt.path)}
+                                            className={opt.label === 'Estadísticas' || opt.label === 'Crear Usuario' ? 'admin-option' : ''}
+                                        >
                                             {opt.label}
                                         </button>
                                     </li>
@@ -58,7 +86,7 @@ function Header() {
                 </div>
             )}
         </header>
-    )
+    );
 }
 
 export default Header;

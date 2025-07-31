@@ -66,3 +66,36 @@
   margin-top: 4px;
   line-height: 1;
 }
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: #f44336;
+  background-color: #ffebee;
+  margin: 1rem;
+  border-radius: 4px;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.estado-actual {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.ultima-actualizacion {
+  color: #666;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
