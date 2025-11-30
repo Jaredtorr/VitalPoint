@@ -40,7 +40,7 @@ function Header() {
             <h1 className="title-navbar">InnovaTech</h1>
             {/* Botón hamburguesa solo si corresponde */}
             {!hideMenu && (
-                <div style={{ position: "absolute", right: 30, top: 30 }}>
+                <div className="header-menu-wrapper">
                     <button
                         className="header-menu-btn"
                         onClick={() => setOpen(!open)}

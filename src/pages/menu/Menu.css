@@ -47,3 +47,22 @@
   font-size: 1.1rem;
   font-weight: 500;
 }
+
+/* Responsive for tablet */
+@media (max-width: 1024px) {
+  .menu-card { width: 180px; height: 200px; }
+  .menu-image { height: 120px; }
+}
+
+@media (max-width: 768px) {
+  .menu-row { flex-wrap: wrap; gap: 1rem; }
+  .menu-card { width: 45%; height: auto; }
+  .menu-image { height: 110px; }
+}
+
+@media (max-width: 420px) {
+  .menu-card { width: 90%; }
+  .menu-row { flex-direction: column; }
+  .menu-image { height: 140px; }
+  .menu-grid { margin-top: 1rem; gap: 1rem; }
+}

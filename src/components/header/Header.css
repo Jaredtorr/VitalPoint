@@ -4,8 +4,8 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 100px;
-    padding: 0 20px;
+  height: 100px;
+  padding: 0 20px;
     position: relative;
     box-sizing: border-box; 
 }
@@ -29,17 +29,17 @@
 .logo {
   width: 80px;
   height: auto;
-  margin-left: 200px;
+  margin-left: 0;
   animation: slideInLeft 1.2s ease-out;
 }
 
 .title-navbar {
     color: #FFFFFF;
     font-size: 39px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap; 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap; 
 }
 
 /* Menú hamburguesa */
@@ -54,14 +54,20 @@
 }
 
 .header-menu-dropdown {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.header-menu-wrapper {
+  position: absolute;
+  right: 30px;
+  top: 30px;
 }
 
 .header-menu-dropdown ul {
@@ -105,4 +111,30 @@
     content: '👑';
     margin-right: 5px;
     font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .navbar { height: 90px; padding: 0 16px; }
+  .logo { width: 64px; }
+  .title-navbar { font-size: 28px; }
+}
+
+@media (max-width: 768px) {
+  .navbar { height: 72px; padding: 0 12px; }
+  .logo { width: 56px; margin-left: 0; }
+  .title-navbar { position: static; transform: none; left: auto; font-size: 18px; white-space: normal; text-align: center; }
+  .header-menu-btn { position: static; right: auto; top: auto; }
+  .header-menu-wrapper { position: static; display: flex; align-items: center; }
+  .left-section { display: flex; align-items: center; gap: 8px; }
+  .header-menu-dropdown { right: 8px; left: auto; width: 220px; }
+}
+
+@media (max-width: 420px) {
+  .navbar { height: 64px; padding: 0 10px; }
+  .logo { width: 48px; }
+  .title-navbar { font-size: 16px; }
+  /* Make dropdown full-width on very small screens */
+  .header-menu-dropdown { left: 8px; right: 8px; width: auto; }
+  .header-menu-dropdown li button { font-size: 15px; padding: 12px 14px; }
 }
