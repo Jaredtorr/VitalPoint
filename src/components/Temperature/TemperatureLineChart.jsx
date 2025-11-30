@@ -6,20 +6,23 @@ const getColor = (temp) => {
   return "#d32f2f";
 };
 
-const WIDTH = 800;
-const HEIGHT = 350;
+// Base coordinates used for the SVG viewBox. The SVG will scale responsively.
+const BASE_WIDTH = 800;
+const BASE_HEIGHT = 350;
 const PADDING = 60;
 
 const TemperatureLineChart = ({ data }) => {
-  console.log("Datos recibidos en la gráfica:", data);
-  if (data.length === 0) return <div>Cargando datos...</div>;
+  if (!data || data.length === 0) return <div>Cargando datos...</div>;
 
-  const minTemp = Math.floor(Math.min(...data.map(d => d.temperatura))) - 1;
-  const maxTemp = Math.ceil(Math.max(...data.map(d => d.temperatura))) + 1;
+  const minTempRaw = Math.min(...data.map(d => d.temperatura));
+  const maxTempRaw = Math.max(...data.map(d => d.temperatura));
+  const minTemp = Math.floor(minTempRaw) - 1;
+  let maxTemp = Math.ceil(maxTempRaw) + 1;
+  if (maxTemp === minTemp) maxTemp = minTemp + 1; // evitar división por cero
 
-  const stepX = data.length > 1 ? (WIDTH - 2 * PADDING) / (data.length - 1) : 0;
+  const stepX = data.length > 1 ? (BASE_WIDTH - 2 * PADDING) / (data.length - 1) : 0;
   const scaleY = (temp) =>
-    HEIGHT - PADDING - ((temp - minTemp) / (maxTemp - minTemp)) * (HEIGHT - 2 * PADDING);
+    BASE_HEIGHT - PADDING - ((temp - minTemp) / (maxTemp - minTemp)) * (BASE_HEIGHT - 2 * PADDING);
 
   const points = data.map((d, i) => ({
     x: PADDING + i * stepX,
@@ -33,12 +36,26 @@ const TemperatureLineChart = ({ data }) => {
     ? points.map((p, i) => (i === 0 ? `M ${p.x},${p.y}` : `L ${p.x},${p.y}`)).join(" ")
     : "";
 
+  // Control dinámico de densidad de etiquetas en eje X para evitar solapamientos.
+  // Estimamos cuántas etiquetas caben (aprox. una cada 70px en el ancho base).
+  const approxLabelSpacingPx = 70;
+  const maxLabels = Math.max(2, Math.floor((BASE_WIDTH - 2 * PADDING) / approxLabelSpacingPx));
+  const labelStep = Math.ceil(data.length / maxLabels);
+  const xLabelFontSize = 12;
+  const yLabelFontSize = 12;
+
   return (
-    <div style={{ width: WIDTH, margin: "40px auto" }}>
-      <svg width={WIDTH} height={HEIGHT} style={{ background: "#fff", borderRadius: 12 }}>
+    <div style={{ width: '100%', maxWidth: 900, margin: "24px auto" }}>
+      <svg
+        width="100%"
+        height="auto"
+        viewBox={`0 0 ${BASE_WIDTH} ${BASE_HEIGHT}`}
+        preserveAspectRatio="xMidYMid meet"
+        style={{ background: "#fff", borderRadius: 12 }}
+      >
         {/* Ejes */}
-        <line x1={PADDING} y1={HEIGHT - PADDING} x2={WIDTH - PADDING} y2={HEIGHT - PADDING} stroke="#aaa" />
-        <line x1={PADDING} y1={PADDING} x2={PADDING} y2={HEIGHT - PADDING} stroke="#aaa" />
+        <line x1={PADDING} y1={BASE_HEIGHT - PADDING} x2={BASE_WIDTH - PADDING} y2={BASE_HEIGHT - PADDING} stroke="#aaa" />
+        <line x1={PADDING} y1={PADDING} x2={PADDING} y2={BASE_HEIGHT - PADDING} stroke="#aaa" />
 
         {/* Etiquetas de eje Y */}
         {[...Array(maxTemp - minTemp + 1)].map((_, i) => {
@@ -46,22 +63,22 @@ const TemperatureLineChart = ({ data }) => {
           const y = scaleY(temp);
           return (
             <g key={temp}>
-              <text x={PADDING - 15} y={y + 5} fontSize="16" textAnchor="end" fill="#444">
+              <text x={PADDING - 15} y={y + 5} fontSize={yLabelFontSize} textAnchor="end" fill="#444">
                 {temp}°C
               </text>
-              <line x1={PADDING - 8} y1={y} x2={PADDING} y2={y} stroke="#ccc" />
+              <line x1={PADDING - 8} y1={y} x2={PADDING} y2={y} stroke="#eee" />
             </g>
           );
         })}
 
-        {/* Etiquetas de eje X */}
+        {/* Etiquetas de eje X (muestreo dinámico) */}
         {points.map((p, i) =>
-          i % 3 === 0 ? (
+          i % labelStep === 0 ? (
             <text
               key={i}
               x={p.x}
-              y={HEIGHT - PADDING + 28}
-              fontSize="16"
+              y={BASE_HEIGHT - PADDING + 24}
+              fontSize={xLabelFontSize}
               textAnchor="middle"
               fill="#444"
             >
@@ -74,7 +91,6 @@ const TemperatureLineChart = ({ data }) => {
         {points.length > 1 && (
           <path d={linePath} fill="none" stroke="#8884d8" strokeWidth="3" />
         )}
-        {/* Ya no se muestran puntos ni valores */}
       </svg>
     </div>
   );
