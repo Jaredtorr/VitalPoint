@@ -11,10 +11,7 @@ const baseMenuOptions = [
   { label: "Nivel de estrés", path: "/stress" },
   { label: "Orina o pH", path: "/phOrina" },
   { label: "Azúcar en la orina", path: "/SugarOrine" },
-];
-
-// Opciones para administradores
-const adminOptions = [
+  // Añadimos las opciones de admin directamente aquí
   { label: "Estadísticas", path: "/estadisticas" },
   { label: "Crear Usuario", path: "/crear-usuario" },
 ];
@@ -23,28 +20,12 @@ function Header() {
     const [open, setOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-    const { user } = useAuth();
-
+    
     // Oculta el menú en login y menú principal
     const hideMenu = ["/", "/Menu"].includes(location.pathname);
-
-    // Añade un console.log para verificar el rol del usuario
-    console.log('Usuario actual:', user);
-
-    const isAdmin = user?.role === 'admin';
     
-    // Modifica cómo se combinan las opciones del menú
-    const menuOptions = React.useMemo(() => {
-        const options = [...baseMenuOptions];
-        
-        if (isAdmin) {
-            options.push(...adminOptions);
-        }
-        
-        options.push({ label: "Cerrar sesión", path: "/" });
-        
-        return options;
-    }, [isAdmin]);
+    // Usamos directamente baseMenuOptions que ya incluye todo
+    const menuOptions = [...baseMenuOptions, { label: "Cerrar sesión", path: "/" }];
 
     const handleNavigate = (path) => {
       setOpen(false);
@@ -74,7 +55,6 @@ function Header() {
                                     <li key={opt.path}>
                                         <button 
                                             onClick={() => handleNavigate(opt.path)}
-                                            className={opt.label === 'Estadísticas' || opt.label === 'Crear Usuario' ? 'admin-option' : ''}
                                         >
                                             {opt.label}
                                         </button>

@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { fetchTemperaturaCorporal } from "../../services/apiServices";
 import Header from "../../Components/Header/Header";
+import SensorAlert from "../../components/SensorAlert/SensorAlert";
+import { connectSensorAlerts } from "../../services/mqttServices";
 import TemperatureCircle from "../../components/Temperature/TemperatureCircle";
 import TemperatureLineChart from "../../components/Temperature/TemperatureLineChart";
 import "./TemperaturaCorporal.css";
 
 const TemperaturaCorporal = () => {
   const [temperaturas, setTemperaturas] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [sensorStatus, setSensorStatus] = useState({
+    max30102: true,
+    mlx90614: true,
+    tcs34725: true
+  });
 
   useEffect(() => {
     fetchTemperaturaCorporal(setTemperaturas);
@@ -14,6 +22,11 @@ const TemperaturaCorporal = () => {
       fetchTemperaturaCorporal(setTemperaturas);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = connectSensorAlerts(setAlerts, setSensorStatus);
+    return () => unsubscribe();
   }, []);
 
   // Mapea los datos para la gráfica
@@ -29,6 +42,7 @@ const TemperaturaCorporal = () => {
   return (
     <div className="temp-main">
       <Header />
+      <SensorAlert alerts={alerts} sensorStatus={sensorStatus} />
       <div className="temp-content">
         <h2 className="temp-label">Temperatura Corporal</h2>
         <TemperatureCircle temperature={temperaturaActual} />

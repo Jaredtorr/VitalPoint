@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "../../Components/Header/Header";
+import SensorAlert from "../../components/SensorAlert/SensorAlert";
 import { fetchOxigenacion } from "../../services/apiServices";
+import { connectSensorAlerts } from "../../services/mqttServices";
 import {
   LineChart,
   Line,
@@ -15,6 +17,12 @@ import "./Oxigeno-sangre.css";
 
 const OxigenoSangre = () => {
   const [oxigenoData, setOxigenoData] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [sensorStatus, setSensorStatus] = useState({
+    max30102: true,
+    mlx90614: true,
+    tcs34725: true
+  });
 
   useEffect(() => {
     fetchOxigenacion(setOxigenoData);
@@ -22,6 +30,11 @@ const OxigenoSangre = () => {
       fetchOxigenacion(setOxigenoData);
     }, 2000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = connectSensorAlerts(setAlerts, setSensorStatus);
+    return () => unsubscribe();
   }, []);
 
   const dataChart = oxigenoData
@@ -38,6 +51,7 @@ const OxigenoSangre = () => {
   return (
     <div className="oxigeno-sangre-container">
       <Header />
+      <SensorAlert alerts={alerts} sensorStatus={sensorStatus} />
       <h2 style={{ textAlign: "center", margin: "30px 0 10px 0", fontWeight: "bold" }}>
         Saturación de oxígeno en sangre
       </h2>

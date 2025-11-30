@@ -1,0 +1,159 @@
+.sensor-alert-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Panel de estado de sensores */
+.sensor-status-panel {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.sensor-status-panel h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.sensor-status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.status-item.connected {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.status-item.disconnected {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  animation: pulse-error 2s infinite;
+}
+
+.status-icon {
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.status-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Lista de alertas */
+.alerts-list {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  border-left: 4px solid #ef4444;
+}
+
+.alerts-list h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.alert-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  animation: slideIn 0.3s ease;
+}
+
+.alert-item:last-child {
+  margin-bottom: 0;
+}
+
+.alert-error {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+}
+
+.alert-success {
+  background: #dcfce7;
+  border: 1px solid #86efac;
+}
+
+.alert-icon {
+  font-size: 20px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-message {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.alert-time {
+  margin: 0;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-error {
+  0%, 100% {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sensor-status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alert-item {
+    flex-direction: column;
+  }
+
+  .alert-icon {
+    text-align: left;
+  }
+}

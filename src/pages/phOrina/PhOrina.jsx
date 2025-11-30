@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchpH } from "../../services/apiServices";
 import Header from "../../Components/Header/Header";
+import SensorAlert from "../../components/SensorAlert/SensorAlert";
+import { connectSensorAlerts } from "../../services/mqttServices";
 import PhLineChart from "../../components/phorina/PhLineChart";
 import "./PhOrina.css";
 
@@ -13,6 +15,12 @@ const getPhEstado = (ph) => {
 
 const PhOrina = () => {
   const [phData, setPhData] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [sensorStatus, setSensorStatus] = useState({
+    max30102: true,
+    mlx90614: true,
+    tcs34725: true
+  });
 
   useEffect(() => {
     fetchpH(setPhData);
@@ -20,6 +28,11 @@ const PhOrina = () => {
       fetchpH(setPhData);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = connectSensorAlerts(setAlerts, setSensorStatus);
+    return () => unsubscribe();
   }, []);
 
   // Mapea y toma solo los 8 datos más recientes
@@ -35,6 +48,7 @@ const PhOrina = () => {
     return (
       <div className="temp-main">
         <Header />
+        <SensorAlert alerts={alerts} sensorStatus={sensorStatus} />
         <div className="temp-content">
           <h2 className="temp-label">pH de Orina</h2>
           <div style={{ color: "red", margin: "2rem" }}>
@@ -56,6 +70,7 @@ const PhOrina = () => {
   return (
     <div className="temp-main">
       <Header />
+      <SensorAlert alerts={alerts} sensorStatus={sensorStatus} />
       <div className="temp-content">
         <h2 className="temp-label">pH de Orina</h2>
         <PhLineChart data={data} />

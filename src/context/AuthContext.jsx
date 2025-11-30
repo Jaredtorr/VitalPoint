@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (userName, password) => {
     try {
-      const response = await fetch('http://44.196.90.31:8080/login', {
+      const response = await fetch('http://98.94.184.140:8080/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
